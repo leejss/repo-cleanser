@@ -16,7 +16,9 @@ export default async function HomePage({
 
     return (
       <div className="font-mono">
-        <h1 className="text-2xl font-bold p-4">Welcome, {owner}</h1>
+        <h1 className="text-2xl font-bold p-4 max-w-5xl mx-auto">
+          Welcome, {owner}
+        </h1>
         <RepoList repos={repos || []} />
       </div>
     );
