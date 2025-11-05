@@ -31,10 +31,10 @@ export async function getOwner() {
   return data.login;
 }
 
-export async function getRepos() {
+export async function getRepos(page: number = 1) {
   const octokit = await getOctokit();
   const repos = await octokit.repos.listForAuthenticatedUser({
-    page: 1,
+    page,
     per_page: 20,
     sort: "updated",
     direction: "desc",
@@ -65,10 +65,10 @@ export async function deleteSelectedRepos(repositoryNames: string[]) {
 
 export async function disconnectGithub() {
   "use server";
-  
+
   const cookieStore = await cookies();
   cookieStore.delete("github_access_token");
-  
+
   revalidatePath("/");
   redirect("/");
 }

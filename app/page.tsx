@@ -2,11 +2,17 @@ import ConnectButton from "@/components/connect-button";
 import RepoList from "@/components/repo-list";
 import { checkAuth, getOwner, getRepos } from "@/lib/actions";
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page: string }>;
+}) {
+  const params = await searchParams;
+  const page = params.page;
   const isAuth = await checkAuth();
   if (isAuth) {
     const owner = await getOwner();
-    const repos = await getRepos();
+    const repos = await getRepos(Number(page ?? "1"));
 
     return (
       <div className="font-mono">
