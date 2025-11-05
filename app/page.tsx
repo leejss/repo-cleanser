@@ -3,7 +3,8 @@ import RepoList from "@/components/repo-list";
 import { checkAuth, getOwner, getRepos } from "@/lib/actions";
 
 export default async function HomePage() {
-  if (await checkAuth()) {
+  const isAuth = await checkAuth();
+  if (isAuth) {
     const owner = await getOwner();
     const repos = await getRepos();
 
@@ -15,8 +16,10 @@ export default async function HomePage() {
     );
   }
   return (
-    <div>
-      <ConnectButton />
+    <div className="h-dvh flex justify-center items-center">
+      <div>
+        <ConnectButton />
+      </div>
     </div>
   );
 }

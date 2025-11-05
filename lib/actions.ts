@@ -3,6 +3,7 @@
 import { Octokit } from "@octokit/rest";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { deleteRepositories } from "./service";
 
 export async function checkAuth() {
@@ -60,4 +61,14 @@ export async function deleteSelectedRepos(repositoryNames: string[]) {
   revalidatePath("/");
 
   return result;
+}
+
+export async function disconnectGithub() {
+  "use server";
+  
+  const cookieStore = await cookies();
+  cookieStore.delete("github_access_token");
+  
+  revalidatePath("/");
+  redirect("/");
 }
