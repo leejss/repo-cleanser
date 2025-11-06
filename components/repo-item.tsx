@@ -27,7 +27,7 @@ export default function RepoItem({
         isSelected ? "bg-neutral-800" : "bg-transparent"
       }`}
     >
-      <div className="flex items-center justify-between gap-4 max-w-5xl mx-auto">
+      <div className="flex items-center justify-between gap-4 mx-auto">
         <div className="flex-1">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-bold hover:underline">

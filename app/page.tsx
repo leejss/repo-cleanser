@@ -2,24 +2,21 @@ import ConnectButton from "@/components/connect-button";
 import RepoList from "@/components/repo-list";
 import { checkAuth, getOwner, getRepos } from "@/lib/actions";
 
-export default async function HomePage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page: string }>;
-}) {
-  const params = await searchParams;
-  const page = params.page;
+export default async function HomePage() {
   const isAuth = await checkAuth();
   if (isAuth) {
     const owner = await getOwner();
-    const repos = await getRepos(Number(page ?? "1"));
+    const { data, totalCount } = await getRepos();
 
     return (
       <div className="font-mono">
-        <h1 className="text-2xl font-bold p-4 max-w-5xl mx-auto">
+        <h1 className="text-2xl font-bold mx-auto py-2">
           Welcome, {owner}
+          <div>
+            <p>Total repositories: {totalCount}</p>
+          </div>
         </h1>
-        <RepoList repos={repos || []} />
+        <RepoList repos={data || []} />
       </div>
     );
   }

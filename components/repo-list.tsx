@@ -59,9 +59,7 @@ export default function RepoList({ repos }: { repos: RepoData[] }) {
   const handleClickBulkDelete = async () => {
     setIsDeleting(true);
     try {
-      await deleteSelectedRepos(
-        selectedRepos.map((repo) => repo.name),
-      );
+      await deleteSelectedRepos(selectedRepos.map((repo) => repo.name));
       setSelectedRepos([]);
       setIsDialogOpen(false);
       setAlert({
@@ -76,7 +74,10 @@ export default function RepoList({ repos }: { repos: RepoData[] }) {
       setAlert({
         isOpen: true,
         title: "삭제 실패",
-        message: error instanceof Error ? error.message : "레포지토리 삭제 중 오류가 발생했습니다.",
+        message:
+          error instanceof Error
+            ? error.message
+            : "레포지토리 삭제 중 오류가 발생했습니다.",
         variant: "error",
       });
     } finally {

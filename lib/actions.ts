@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { deleteRepositories } from "./service";
+import { saveAsJson } from "./dev-utils";
 
 export async function checkAuth() {
   const cookieStore = await cookies();
@@ -31,16 +32,18 @@ export async function getOwner() {
   return data.login;
 }
 
-export async function getRepos(page: number = 1) {
+export async function getRepos() {
   const octokit = await getOctokit();
-  const repos = await octokit.repos.listForAuthenticatedUser({
-    page,
-    per_page: 20,
-    sort: "updated",
-    direction: "desc",
-  });
+  const allRepos = await octokit.paginate(
+    octokit.rest.repos.listForAuthenticatedUser,
+    {
+      per_page: 30,
+      sort: "updated",
+      direction: "desc",
+    },
+  );
 
-  return repos.data.map((repo) => ({
+  const data = allRepos.map((repo) => ({
     name: repo.name,
     url: repo.html_url,
     description: repo.description ?? "",
@@ -49,6 +52,10 @@ export async function getRepos(page: number = 1) {
     updatedAt: repo.updated_at ?? "",
     visibility: repo.visibility ?? "",
   }));
+  return {
+    data,
+    totalCount: allRepos.length,
+  };
 }
 
 export async function deleteSelectedRepos(repositoryNames: string[]) {
