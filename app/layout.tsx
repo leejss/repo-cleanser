@@ -17,23 +17,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Repo Remover",
-    template: "%s | Repo Remover",
+    default: "Repo Cleanser",
+    template: "%s | Repo Cleanser",
   },
-  description: "GitHub 레포지토리를 쉽고 빠르게 관리하세요. 대량 삭제, 정리, 최적화를 한 번에.",
+  description:
+    "GitHub 레포지토리를 쉽고 빠르게 관리하세요. 대량 삭제, 정리, 최적화를 한 번에.",
   keywords: ["GitHub", "repository", "manager", "cleanup", "delete", "bulk"],
-  authors: [{ name: "Repo Remover" }],
+  authors: [{ name: "Repo Cleanser" }],
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://repo-remover.vercel.app",
-    title: "Repo Remover",
+    title: "Repo Cleanser",
     description: "GitHub 레포지토리를 쉽고 빠르게 관리하세요.",
-    siteName: "Repo Remover",
+    siteName: "Repo Cleanser",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Repo Remover",
+    title: "Repo Cleanser",
     description: "GitHub 레포지토리를 쉽고 빠르게 관리하세요.",
   },
   robots: {
@@ -54,9 +54,7 @@ export default function RootLayout({
       >
         <div className="relative flex min-h-screen flex-col">
           <Header />
-          <main className="flex-1">
-            {children}
-          </main>
+          <main className="flex-1">{children}</main>
         </div>
       </body>
     </html>

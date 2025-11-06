@@ -1,5 +1,5 @@
 
-# Repo Remover
+# Repo Cleanser
 
 GitHub 레포지토리를 한 번에 관리하고 삭제하는 웹 애플리케이션입니다.
 
