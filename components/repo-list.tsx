@@ -107,29 +107,52 @@ export default function RepoList({ repos }: { repos: RepoData[] }) {
       />
       <div>
         {selectedRepos.length > 0 && (
-          <div className="sticky top-0 bg-neutral-900 border-b border-neutral-500 p-4 mb-4">
-            <div className="flex items-center justify-between">
-              <p className="text-sm">
-                선택된 레포지토리: <strong>{selectedRepos.length}개</strong>
-              </p>
-              <button
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm font-semibold transition-colors"
-                onClick={() => setIsDialogOpen(true)}
-              >
-                선택한 레포지토리 삭제
-              </button>
+          <div className="sticky top-16 z-40 bg-card border-b p-4 mb-4 shadow-sm">
+            <div className="container mx-auto">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-medium">
+                    {selectedRepos.length}
+                  </div>
+                  <p className="text-sm font-medium">
+                    선택된 레포지토리
+                  </p>
+                </div>
+                <button
+                  className="inline-flex items-center gap-2 rounded-md bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground shadow-sm hover:bg-destructive/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  onClick={() => setIsDialogOpen(true)}
+                >
+                  <svg 
+                    className="h-4 w-4" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round" 
+                      strokeWidth={2} 
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" 
+                    />
+                  </svg>
+                  선택한 레포지토리 삭제
+                </button>
+              </div>
             </div>
           </div>
         )}
 
-        {repos.map((repo) => (
-          <RepoItem
-            key={`${repo.owner}/${repo.name}`}
-            repo={repo}
-            isSelected={isSelected(repo.owner, repo.name)}
-            onToggle={() => handleToggleRepo(repo.owner, repo.name)}
-          />
-        ))}
+        <div className="space-y-2">
+          {repos.map((repo) => (
+            <RepoItem
+              key={`${repo.owner}/${repo.name}`}
+              repo={repo}
+              isSelected={isSelected(repo.owner, repo.name)}
+              onToggle={() => handleToggleRepo(repo.owner, repo.name)}
+            />
+          ))}
+        </div>
       </div>
     </>
   );
