@@ -76,14 +76,11 @@ export async function deleteSelectedRepos(repositoryNames: string[]) {
   return result;
 }
 
-export async function getStarredRepos() {
+export async function getStarredRepos(page: number = 1, perPage: number = 30) {
   const octokit = await getOctokit();
-  const starredRepos = await getStarredRepositories(octokit);
+  const result = await getStarredRepositories(octokit, page, perPage);
 
-  return {
-    data: starredRepos,
-    totalCount: starredRepos.length,
-  };
+  return result;
 }
 
 export async function starRepo(owner: string, repositoryName: string) {

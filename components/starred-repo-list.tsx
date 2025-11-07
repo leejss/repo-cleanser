@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import StarredRepoItem from "./starred-repo-item";
 
 type StarredRepoData = {
@@ -17,10 +18,22 @@ type StarredRepoData = {
   forksCount: number;
 };
 
+type PaginationInfo = {
+  currentPage: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  nextPage?: number;
+  prevPage?: number;
+  firstPage?: number;
+  lastPage?: number;
+};
+
 export default function StarredRepoList({
   repos,
+  pagination,
 }: {
   repos: StarredRepoData[];
+  pagination: PaginationInfo;
 }) {
   const [localRepos, setLocalRepos] = useState(repos);
 
@@ -68,7 +81,8 @@ export default function StarredRepoList({
           </h2>
           <p className="text-sm text-muted-foreground">
             {localRepos.length} starred{" "}
-            {localRepos.length === 1 ? "repository" : "repositories"}
+            {localRepos.length === 1 ? "repository" : "repositories"} on this
+            page
           </p>
         </div>
       </div>
@@ -82,6 +96,93 @@ export default function StarredRepoList({
           />
         ))}
       </div>
+
+      {/* Pagination Controls */}
+      {(pagination.hasNext || pagination.hasPrev) && (
+        <div className="flex items-center justify-between pt-4 border-t">
+          {pagination.hasPrev && pagination.prevPage ? (
+            <Link
+              href={`/starred?page=${pagination.prevPage}`}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Previous
+            </Link>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border opacity-50 cursor-not-allowed">
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Previous
+            </div>
+          )}
+
+          <div className="text-sm text-muted-foreground">
+            Page {pagination.currentPage}
+          </div>
+
+          {pagination.hasNext && pagination.nextPage ? (
+            <Link
+              href={`/starred?page=${pagination.nextPage}`}
+              className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              Next
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </Link>
+          ) : (
+            <div className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg border opacity-50 cursor-not-allowed">
+              Next
+              <svg
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

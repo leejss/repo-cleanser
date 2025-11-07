@@ -1,6 +1,6 @@
 import ConnectButton from "@/components/connect-button";
 import RepoList from "@/components/repo-list";
-import { checkAuth, getOwner, getRepos, getStarredRepos } from "@/lib/actions";
+import { checkAuth, getOwner, getRepos } from "@/lib/actions";
 import Link from "next/link";
 
 export default async function HomePage() {
@@ -8,7 +8,6 @@ export default async function HomePage() {
   if (isAuth) {
     const owner = await getOwner();
     const { data, totalCount } = await getRepos();
-    const { totalCount: starredCount } = await getStarredRepos();
 
     return (
       <div className="container mx-auto px-4 py-8">
@@ -32,23 +31,21 @@ export default async function HomePage() {
                     Total repositories
                   </div>
                 </div>
-                {starredCount > 0 && (
-                  <div>
-                    <Link
-                      href="/starred"
-                      className="inline-flex items-center gap-2 text-sm font-medium text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors"
+                <div>
+                  <Link
+                    href="/starred"
+                    className="inline-flex items-center gap-2 text-sm font-medium text-yellow-600 hover:text-yellow-700 dark:text-yellow-400 dark:hover:text-yellow-300 transition-colors"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
                     >
-                      <svg
-                        className="h-4 w-4"
-                        fill="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                      </svg>
-                      {starredCount} starred
-                    </Link>
-                  </div>
-                )}
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
+                    View starred
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

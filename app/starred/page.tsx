@@ -2,13 +2,22 @@ import { checkAuth, getStarredRepos } from "@/lib/actions";
 import StarredRepoList from "@/components/starred-repo-list";
 import { redirect } from "next/navigation";
 
-export default async function StarredPage() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function StarredPage({
+  searchParams,
+}: {
+  searchParams: SearchParams;
+}) {
   const isAuth = await checkAuth();
 
   if (!isAuth) {
     redirect("/");
   }
-  const { data, totalCount } = await getStarredRepos();
+
+  const params = await searchParams;
+  const page = typeof params.page === "string" ? parseInt(params.page, 10) : 1;
+  const { data, pagination } = await getStarredRepos(page);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -23,18 +32,10 @@ export default async function StarredPage() {
                 Repositories you&apos;ve starred on GitHub
               </p>
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
-                {totalCount}
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Starred repositories
-              </div>
-            </div>
           </div>
         </div>
       </div>
-      <StarredRepoList repos={data} />
+      <StarredRepoList repos={data} pagination={pagination} />
     </div>
   );
 }

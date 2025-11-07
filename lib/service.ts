@@ -44,29 +44,75 @@ export async function deleteRepositories(
   return results;
 }
 
-export async function getStarredRepositories(octokit: Octokit) {
-  const allStarredRepos = await octokit.paginate(
-    octokit.rest.activity.listReposStarredByAuthenticatedUser,
-    {
-      per_page: 100,
-      sort: "created",
-      direction: "desc",
-    },
-  );
+/**
+ * Parse GitHub's Link header to extract pagination URLs
+ * Link header format: <url>; rel="next", <url>; rel="last"
+ */
+function parseLinkHeader(linkHeader: string | undefined): {
+  next?: number;
+  prev?: number;
+  first?: number;
+  last?: number;
+} {
+  if (!linkHeader) return {};
 
-  return allStarredRepos.map((repo) => ({
-    name: repo.name,
-    url: repo.html_url,
-    description: repo.description ?? "",
-    owner: repo.owner.login,
-    createdAt: repo.created_at ?? "",
-    updatedAt: repo.updated_at ?? "",
-    visibility: repo.visibility ?? "",
-    starredAt: repo.starred_at ?? "",
-    language: repo.language ?? "",
-    stargazersCount: repo.stargazers_count ?? 0,
-    forksCount: repo.forks_count ?? 0,
-  }));
+  const links: Record<string, number> = {};
+  const parts = linkHeader.split(",");
+
+  for (const part of parts) {
+    const match = part.match(/<([^>]+)>;\s*rel="([^"]+)"/);
+    if (match) {
+      const url = match[1];
+      const rel = match[2];
+      const pageMatch = url.match(/[?&]page=(\d+)/);
+      if (pageMatch) {
+        links[rel] = parseInt(pageMatch[1], 10);
+      }
+    }
+  }
+
+  return links;
+}
+
+export async function getStarredRepositories(
+  octokit: Octokit,
+  page: number = 1,
+  perPage: number = 30,
+) {
+  const response = await octokit.rest.activity.listReposStarredByAuthenticatedUser({
+    per_page: perPage,
+    page,
+    sort: "created",
+    direction: "desc",
+  });
+
+  const linkHeader = response.headers.link;
+  const pagination = parseLinkHeader(linkHeader);
+
+  return {
+    data: response.data.map((repo) => ({
+      name: repo.name,
+      url: repo.html_url,
+      description: repo.description ?? "",
+      owner: repo.owner.login,
+      createdAt: repo.created_at ?? "",
+      updatedAt: repo.updated_at ?? "",
+      visibility: repo.visibility ?? "",
+      starredAt: repo.starred_at ?? "",
+      language: repo.language ?? "",
+      stargazersCount: repo.stargazers_count ?? 0,
+      forksCount: repo.forks_count ?? 0,
+    })),
+    pagination: {
+      currentPage: page,
+      hasNext: !!pagination.next,
+      hasPrev: !!pagination.prev,
+      nextPage: pagination.next,
+      prevPage: pagination.prev,
+      firstPage: pagination.first,
+      lastPage: pagination.last,
+    },
+  };
 }
 
 export async function starRepository(
