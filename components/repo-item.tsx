@@ -1,4 +1,5 @@
 import { formatDate } from "@/lib/format";
+import StarButton from "./star-button";
 
 type RepoData = {
   name: string;
@@ -44,12 +45,14 @@ export default function RepoItem({
             </h3>
             
             <div className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-              repo.visibility === 'public' 
+              repo.visibility === 'public'
                 ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
                 : 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
             }`}>
               {repo.visibility}
             </div>
+
+            <StarButton owner={repo.owner} name={repo.name} />
           </div>
           
           <div className="space-y-2">

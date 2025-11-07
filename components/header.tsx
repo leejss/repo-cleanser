@@ -1,15 +1,37 @@
 import { checkAuth, disconnectGithub } from "@/lib/actions";
+import Link from "next/link";
 
 export default async function Header() {
   const isAuth = await checkAuth();
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <div className="flex items-center space-x-4">
-          <h1 className="text-xl font-bold tracking-tight">Repo Cleanser</h1>
-          <span className="hidden text-sm text-muted-foreground sm:inline-block">
-            GitHub Repository Manager
-          </span>
+        <div className="flex items-center space-x-6">
+          <Link href="/" className="flex items-center space-x-4">
+            <h1 className="text-xl font-bold tracking-tight hover:text-primary transition-colors">
+              Repo Cleanser
+            </h1>
+            <span className="hidden text-sm text-muted-foreground sm:inline-block">
+              GitHub Repository Manager
+            </span>
+          </Link>
+
+          {isAuth && (
+            <nav className="flex items-center space-x-4">
+              <Link
+                href="/"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                My Repositories
+              </Link>
+              <Link
+                href="/starred"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Starred
+              </Link>
+            </nav>
+          )}
         </div>
 
         {isAuth && (

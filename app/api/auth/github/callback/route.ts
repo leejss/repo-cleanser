@@ -29,9 +29,7 @@ export async function GET(request: NextRequest) {
   }
 
   const accessToken = data.access_token;
-  console.log(accessToken);
 
-  // cookieStore.set("accessToken", accessToken);
   const cookieStore = await cookies();
   cookieStore.set("github_access_token", accessToken, {
     httpOnly: true,

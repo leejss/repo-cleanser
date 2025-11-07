@@ -4,7 +4,13 @@ import { Octokit } from "@octokit/rest";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { deleteRepositories } from "./service";
+import {
+  deleteRepositories,
+  getStarredRepositories,
+  starRepository,
+  unstarRepository,
+  checkIfRepositoryIsStarred
+} from "./service";
 import { saveAsJson } from "./dev-utils";
 
 export async function checkAuth() {
@@ -68,6 +74,37 @@ export async function deleteSelectedRepos(repositoryNames: string[]) {
   revalidatePath("/");
 
   return result;
+}
+
+export async function getStarredRepos() {
+  const octokit = await getOctokit();
+  const starredRepos = await getStarredRepositories(octokit);
+
+  return {
+    data: starredRepos,
+    totalCount: starredRepos.length,
+  };
+}
+
+export async function starRepo(owner: string, repositoryName: string) {
+  const octokit = await getOctokit();
+  await starRepository(octokit, owner, repositoryName);
+
+  revalidatePath("/starred");
+  revalidatePath("/");
+}
+
+export async function unstarRepo(owner: string, repositoryName: string) {
+  const octokit = await getOctokit();
+  await unstarRepository(octokit, owner, repositoryName);
+
+  revalidatePath("/starred");
+  revalidatePath("/");
+}
+
+export async function checkIfRepoIsStarred(owner: string, repositoryName: string) {
+  const octokit = await getOctokit();
+  return await checkIfRepositoryIsStarred(octokit, owner, repositoryName);
 }
 
 export async function disconnectGithub() {
