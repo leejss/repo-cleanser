@@ -1,4 +1,5 @@
 import type { Octokit } from "@octokit/rest";
+import { saveAsJson } from "./dev-utils";
 
 export async function getCurrentUser(octokit: Octokit) {
   const { data } = await octokit.users.getAuthenticated();
@@ -79,15 +80,18 @@ export async function getStarredRepositories(
   page: number = 1,
   perPage: number = 30,
 ) {
-  const response = await octokit.rest.activity.listReposStarredByAuthenticatedUser({
-    per_page: perPage,
-    page,
-    sort: "created",
-    direction: "desc",
-  });
+  const response =
+    await octokit.rest.activity.listReposStarredByAuthenticatedUser({
+      per_page: perPage,
+      page,
+      sort: "created",
+      direction: "desc",
+    });
 
   const linkHeader = response.headers.link;
   const pagination = parseLinkHeader(linkHeader);
+
+  saveAsJson(response.data, `starred-repos-page-${page}.json`);
 
   return {
     data: response.data.map((repo) => ({
