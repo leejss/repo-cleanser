@@ -1,15 +1,13 @@
-import { checkAuth, getOwner, getStarredRepos } from "@/lib/actions";
+import { checkAuth, getStarredRepos } from "@/lib/actions";
 import StarredRepoList from "@/components/starred-repo-list";
 import { redirect } from "next/navigation";
 
 export default async function StarredPage() {
   const isAuth = await checkAuth();
-  
+
   if (!isAuth) {
     redirect("/");
   }
-
-  const owner = await getOwner();
   const { data, totalCount } = await getStarredRepos();
 
   return (
@@ -22,7 +20,7 @@ export default async function StarredPage() {
                 Starred Repositories
               </h1>
               <p className="text-muted-foreground">
-                Repositories you've starred on GitHub
+                Repositories you&apos;ve starred on GitHub
               </p>
             </div>
             <div className="text-right">
@@ -36,7 +34,6 @@ export default async function StarredPage() {
           </div>
         </div>
       </div>
-
       <StarredRepoList repos={data} />
     </div>
   );

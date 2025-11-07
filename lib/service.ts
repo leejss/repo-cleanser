@@ -48,8 +48,8 @@ export async function getStarredRepositories(octokit: Octokit) {
   const allStarredRepos = await octokit.paginate(
     octokit.rest.activity.listReposStarredByAuthenticatedUser,
     {
-      per_page: 30,
-      sort: "updated",
+      per_page: 100,
+      sort: "created",
       direction: "desc",
     },
   );

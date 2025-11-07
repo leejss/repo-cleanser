@@ -17,11 +17,17 @@ type StarredRepoData = {
   forksCount: number;
 };
 
-export default function StarredRepoList({ repos }: { repos: StarredRepoData[] }) {
+export default function StarredRepoList({
+  repos,
+}: {
+  repos: StarredRepoData[];
+}) {
   const [localRepos, setLocalRepos] = useState(repos);
 
   const handleUnstar = (owner: string, name: string) => {
-    setLocalRepos(prev => prev.filter(repo => !(repo.owner === owner && repo.name === name)));
+    setLocalRepos((prev) =>
+      prev.filter((repo) => !(repo.owner === owner && repo.name === name)),
+    );
   };
 
   if (localRepos.length === 0) {
@@ -45,7 +51,8 @@ export default function StarredRepoList({ repos }: { repos: StarredRepoData[] })
             No starred repositories
           </h3>
           <p className="mt-2 text-sm text-muted-foreground">
-            You haven't starred any repositories yet. Star repositories you find interesting to see them here.
+            You haven&apos;t starred any repositories yet. Star repositories you
+            find interesting to see them here.
           </p>
         </div>
       </div>
@@ -60,7 +67,8 @@ export default function StarredRepoList({ repos }: { repos: StarredRepoData[] })
             Starred Repositories
           </h2>
           <p className="text-sm text-muted-foreground">
-            {localRepos.length} starred {localRepos.length === 1 ? 'repository' : 'repositories'}
+            {localRepos.length} starred{" "}
+            {localRepos.length === 1 ? "repository" : "repositories"}
           </p>
         </div>
       </div>
