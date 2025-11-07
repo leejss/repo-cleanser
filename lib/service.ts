@@ -91,8 +91,6 @@ export async function getStarredRepositories(
   const linkHeader = response.headers.link;
   const pagination = parseLinkHeader(linkHeader);
 
-  saveAsJson(response.data, `starred-repos-page-${page}.json`);
-
   return {
     data: response.data.map((repo) => ({
       name: repo.name,

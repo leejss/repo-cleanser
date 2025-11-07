@@ -38,8 +38,6 @@ export default function StarredRepoItem({
     }
   };
 
-  console.log(repo);
-
   return (
     <div className="group rounded-lg border bg-card p-4 transition-all duration-200 hover:shadow-md border-border hover:border-primary/30">
       <div className="flex items-start justify-between gap-4">
